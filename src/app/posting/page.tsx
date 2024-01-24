@@ -2,40 +2,46 @@
 
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import { requestApi } from "@/app/api/request"
-import styles from '../../page.module.css'
+import styles from '../page.module.css'
 import { useState } from "react"
+import { useRouter } from 'next/navigation'
 
-async function getUsers(page: number) {
-    const res = await requestApi({method: 'GET', uri : `users?_limit=5&_page=${page}}`});
+
+async function getPosts(page: number) {
+    const res = await requestApi({method: 'GET', uri : `posts?_limit=10&_page=${page}}`});
     return res;
 }
 
-export default function ListUsers() {
+export default function ListPosting() {
     const [page, setPage] = useState(1);
+    const { isError, error, data, isPlaceholderData } = useQuery({queryKey: ["postingList", page], queryFn: () => getPosts(page), placeholderData: keepPreviousData})
+    const router = useRouter();
 
-    const { isError, error, data, isPlaceholderData } = useQuery({queryKey: ["userList", page], queryFn: () => getUsers(page), placeholderData: keepPreviousData})
+    function goToCreatePage() {
+        router.push('/posting/create');
+    }
 
     return (
         <div style={{width: '100%'}}>
             {!isError ? (
                 <>
                     <div className={styles.tableTitle}>
-                        <p>User Table</p>
+                        <p>Posting Table</p>
                         <span>Current Page: {page}</span>
                     </div>
                     <table style={{width: '100%'}} border={2}>
                         <tr>
+                            <th>userId</th>
                             <th>id</th>
-                            <th>name</th>
-                            <th>username</th>
-                            <th>phone</th>
+                            <th>title</th>
+                            <th>body</th>
                         </tr>
                         {data?.map((user: Record<string, string>) => (
                             <tr>
+                                <td>{user.userId}</td>
                                 <td>{user.id}</td>
-                                <td>{user.name}</td>
-                                <td>{user.username}</td>
-                                <td>{user.phone}</td>
+                                <td>{user.title}</td>
+                                <td>{user.body}</td>
                             </tr>
                         ))}
                     </table>
@@ -55,6 +61,12 @@ export default function ListUsers() {
                             disabled={isPlaceholderData || data?.length === 0}
                         >
                             Next
+                        </button>
+                        <button
+                            style={{ float: 'right', background: 'blue', color: 'white' }}
+                            onClick={() => goToCreatePage()}
+                        >
+                            등록
                         </button>
                     </div>
                  </> ) : (
