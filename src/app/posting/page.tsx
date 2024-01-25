@@ -21,6 +21,10 @@ export default function ListPosting() {
         router.push('/posting/create');
     }
 
+    function goToUserPage() {
+        router.push('/user');
+    }
+
     return (
         <div style={{width: '100%'}}>
             {!isError ? (
@@ -28,6 +32,12 @@ export default function ListPosting() {
                     <div className={styles.tableTitle}>
                         <p>Posting Table</p>
                         <span>Current Page: {page}</span>
+                        <button
+                            className={styles.basicButton}
+                            onClick={() => goToUserPage()}
+                        >
+                            이전 페이지
+                        </button>
                     </div>
                     <table style={{width: '100%'}} border={2}>
                         <tr>
@@ -49,6 +59,7 @@ export default function ListPosting() {
                         <button
                             onClick={() => setPage((old) => Math.max(old - 1, 0))}
                             disabled={page === 1}
+                            className={styles.basicButton}
                         >
                             Prev
                         </button>{' '}
@@ -59,11 +70,12 @@ export default function ListPosting() {
                                 }
                             }}
                             disabled={isPlaceholderData || data?.length === 0}
+                            className={styles.basicButton}
                         >
                             Next
                         </button>
                         <button
-                            style={{ float: 'right', background: 'blue', color: 'white' }}
+                            className={styles.createButton}
                             onClick={() => goToCreatePage()}
                         >
                             등록

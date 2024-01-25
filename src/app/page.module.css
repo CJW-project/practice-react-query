@@ -21,3 +21,21 @@
 .paing {
   margin-top: 20px;
 }
+
+.formInput {
+  margin-top: 10px;
+}
+
+.basicButton {
+  height: 30px;
+  margin-top: 10px;
+}
+
+.createButton {
+  margin-top: 10px;
+  width: 80px;
+  height: 30px;
+  float: right;
+  background: blue;
+  color: white
+}
